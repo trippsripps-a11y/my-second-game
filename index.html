@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BROLET - Infinite Marketplace</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #25a0e2; /* Signature Blooket Sky Blue Grid */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 20%, transparent 20%),
+                              radial-gradient(rgba(255, 255, 255, 0.15) 20%, transparent 20%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: white;
+            margin: 0;
+            padding: 0;
+            webkit-user-select: none;
+            user-select: none;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+        }
+
+        /* Blooket-Inspired Home Screen Split Layout */
+        .full-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #f19d38; /* Signature Blooket Orange */
+            display: flex;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            overflow: hidden;
+        }
+        
+        /* Left Purple Section with Custom Diagonal Cut */
+        .home-left {
+            background: #7d2ae8; /* Vibrant Blooket Purple */
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 80px;
+            text-align: left;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+        }
+        .home-left::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -80px; width: 80px; height: 100%;
+            background: #7d2ae8;
+            clip-path: polygon(0 0, 0% 100%, 100% 100%);
+        }
+
+        /* Branding Typography */
+        .main-brand-title {
+            font-size: 5rem;
+            font-weight: 900;
+            color: white;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -1px;
+            font-family: 'Arial Black', sans-serif;
+        }
+        .beta-tag {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f19d38;
+            margin-left: 10px;
+            vertical-align: super;
+        }
+        .sub-brand-text {
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 30px 0;
+            opacity: 0.95;
+        }
+
+        /* Interactive Pronunciation Label Box */
+        .pronounce-container {
+            background: #111111;
+            border: 2px solid white;
+            border-radius: 6px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            cursor: pointer;
+        }
+        .pronounce-icon { font-size: 1.2rem; }
+        .pronounce-text { font-size: 1.1rem; color: white; font-weight: 600; }
+
+        /* Landing Interactive Action Trigger */
+        .get-started-btn {
+            background: white;
+            color: #7d2ae8;
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 16px 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 0px #bfa1f7;
+            transition: all 0.1s ease;
+        }
+        .get-started-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #bfa1f7;
+        }
+
+        /* Right Floating Grid Section for Square Collectibles */
+        .home-right {
+            width: 55%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .blook-floating-grid {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-40%, -50%) rotate(-5deg);
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 25px;
+        }
+        
+        /* Box Blocks Mimicking Game Icons */
+        .square-blook-token {
+            width: 100px;
+            height: 100px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.15);
+            animation: floating-bounce 4s ease-in-out infinite alternate;
+        }
+        
+        .blook-p1 { background: #ff8ebb; animation-delay: 0s; }
+        .blook-p2 { background: #424652; animation-delay: 0.4s; }
+        .blook-p3 { background: #60a5fa; animation-delay: 0.8s; }
+        .blook-p4 { background: #fbbf24; animation-delay: 0.2s; }
+        .blook-p5 { background: #34d399; animation-delay: 0.6s; }
+        .blook-p6 { background: #f87171; animation-delay: 1s; }
+        .blook-p7 { background: #f472b6; animation-delay: 0.3s; }
+        .blook-p8 { background: #a78bfa; animation-delay: 0.7s; }
+        .blook-p9 { background: #fb7185; animation-delay: 1.1s; }
+
+        @keyframes floating-bounce {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-12px); }
+        }
+
+        /* --- LEFT SIDEBAR LAYOUT --- */
+        .sidebar {
+            width: 220px;
+            background: #7d2ae8; /* Blooket Menu Purple */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            box-sizing: border-box;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .sidebar-logo {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: white;
+            text-align: left;
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 14px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 0;
+            transition: all 0.2s ease;
+        }
+        .sidebar-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .sidebar-btn.active {
+            background: white;
+            color: #7d2ae8;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            margin-left: 10px;
+            width: calc(100% - 10px);
+            box-shadow: -4px 4px 10px rgba(0,0,0,0.1);
+        }
+        .sidebar-play-btn {
+            background: #00bf8a; /* Bright Play Green */
+            color: white !important;
+            margin: 0 15px 25px 15px;
+            padding: 12px;
+            border-radius: 8px;
+            justify-content: center;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
+            width: calc(100% - 30px);
+        }
+        .sidebar-play-btn:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.2);
+        }
+
+        /* Main Content Container Layout */
+        .main-content {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Top Right Token Display Badge */
+        .top-token-badge {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            background: #111111;
+            border: 2px solid #eab308;
+            padding: 8px 18px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .top-token-badge span { color: #eab308; }
+
+        /* Multi-Pane Architecture View States */
+        .game-pane {
+            display: none;
+            max-width: 1000px;
+            margin: 40px auto 0 auto;
+            text-align: left;
+        }
+        .game-pane.active {
+            display: block;
+        }
+
+        .pane-title {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+        }
+
+        /* Pack Display Formatting */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+        }
+        .pack-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 4px solid #bde3f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        .pack-card:hover { transform: translateY(-5px); }
+        .pack-icon {
+            font-size: 4.5rem;
+            margin: 15px 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        .pack-name { font-size: 1.5rem; font-weight: 900; color: #333; }
+        .buy-btn {
+            margin-top: 15px;
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
+            cursor: pointer;
